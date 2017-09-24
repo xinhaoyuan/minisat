@@ -1,2 +1,4 @@
 config.mk
 build
+/*.dir
+/x64

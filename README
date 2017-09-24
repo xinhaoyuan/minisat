@@ -1,4 +1,14 @@
 ================================================================================
+CMake Build on Windows
+
+The CMakeLists.txt has been modified to build under Windows (only Windows 10 is tested).
+
+On Windows build, It assumes that zlib has been installed in ../zlib/install prefix.
+This can be done by running cmake command in ../zlib/build:
+
+cmake -G [...] -DCMAKE_INSTALL_PREFIX=../install ..
+
+================================================================================
 Quick Install
 
 - Decide where to install the files . The simplest approach is to use

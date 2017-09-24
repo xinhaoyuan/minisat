@@ -26,7 +26,20 @@ set(MINISAT_SOVERSION ${MINISAT_SOMAJOR})
 #--------------------------------------------------------------------------------------------------
 # Dependencies:
 
-find_package(ZLIB)
+if (WIN32)
+  set(ZLIB_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/../zlib/install")
+  set(ZLIB_LIBRARY
+    debug     "${ZLIB_INSTALL_PREFIX}/lib/zlibd.lib"
+	optimized "${ZLIB_INSTALL_PREFIX}/lib/zlib.lib")
+  set(ZLIB_LIBRARY_STATIC
+    debug     "${ZLIB_INSTALL_PREFIX}/lib/zlibstaticd.lib"
+	optimized "${ZLIB_INSTALL_PREFIX}/lib/zlibstatic.lib")
+  set(ZLIB_INCLUDE_DIR "${ZLIB_INSTALL_PREFIX}/include")
+else (WIN32)
+  find_package(ZLIB)
+  # XXX this is just a workaround ...
+  set(ZLIB_LIBRARY_STATIC ${ZLIB_LIBRARY})
+endif (WIN32)
 include_directories(${ZLIB_INCLUDE_DIR})
 include_directories(${minisat_SOURCE_DIR})
 
@@ -48,7 +61,7 @@ add_library(minisat-lib-static STATIC ${MINISAT_LIB_SOURCES})
 add_library(minisat-lib-shared SHARED ${MINISAT_LIB_SOURCES})
 
 target_link_libraries(minisat-lib-shared ${ZLIB_LIBRARY})
-target_link_libraries(minisat-lib-static ${ZLIB_LIBRARY})
+target_link_libraries(minisat-lib-static ${ZLIB_LIBRARY_STATIC})
 
 add_executable(minisat_core minisat/core/Main.cc)
 add_executable(minisat_simp minisat/simp/Main.cc)
